@@ -26,8 +26,6 @@ public class ApiBase {
     var parameters: [String: Any] = [:]
     
 
-    
-    
     public enum DefaultEndpoint: ApiEndpointProtocol {
         case `default`
         
@@ -62,20 +60,9 @@ public class ApiBase {
         return self
     }
     
-    public func lfwID(_ lfwID: String) -> Self {
-        self.headers["lfwID"] = lfwID
-        return self
-    }
-    
-    public func date(_ date: String) -> Self {
-        self.parameters["date"] = date
-        return self
-    }
-    
   
     
     // MARK: - Request Types
-    
     public func asJSON() -> AnyPublisher<String, Error> {
         return makeRequest()
             .map { String(data: $0.data, encoding: .utf8) ?? "" }
