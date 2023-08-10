@@ -17,14 +17,11 @@ import Foundation
 
 // MARK: - Config Api endpoints
 public enum ExampleEndpoint: ApiEndpointProtocol {
-    
-    case rawEndpoint(_ endpoint: String, _ method: String)
     case getUser
     case getCountries
     
     public var path: String {
         switch self {
-        case .rawEndpoint(let endpoint, _): return endpoint
         case .getUser: return "/api/user"
         case .getCountries: return "/api/countries/locales"
         }
@@ -32,7 +29,6 @@ public enum ExampleEndpoint: ApiEndpointProtocol {
     
     public var method: String {
         switch self {
-        case .rawEndpoint(_, let method): return method
         case .getCountries: return "GET"
         case .getUser: return "POST"
         }

@@ -22,8 +22,8 @@ public class ApiBase {
     private var url: URL!
     private var endpoint: ApiEndpointProtocol = DefaultEndpoint.default
 
-    var headers: [String: String] = [:]
-    var parameters: [String: Any] = [:]
+    private var headers: [String: String] = [:]
+    private var parameters: [String: Any] = [:]
     
 
     public enum DefaultEndpoint: ApiEndpointProtocol {
@@ -45,8 +45,18 @@ public class ApiBase {
         return self
     }
     
+    public func endpoint(path: String, method: String) -> Self {
+        self.endpoint = RawEndpoint.with(path, method)
+        return self
+    }
+    
     public func parameter(_ value: ApiParameterProtocol) -> Self {
         self.parameters[value.key] = value.value
+        return self
+    }
+    
+    public func parameter(key: String, value: String) -> Self {
+        self.parameters[key] = value
         return self
     }
 
