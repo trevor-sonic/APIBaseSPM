@@ -10,6 +10,7 @@ import SwiftUI
 
 public struct APITestView: View {
     
+    public init(){}
     
     public var body: some View {
         Text("API Test View")

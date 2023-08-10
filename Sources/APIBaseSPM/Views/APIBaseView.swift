@@ -52,12 +52,14 @@ import Combine
     }
 }
 
-struct APIBaseView: View {
+public struct APIBaseView: View {
     
-   
+   // MARK: - init
+    public init(){}
+    
     @ObservedObject var apiAccess = APIAccess()
     
-    var body: some View {
+    public var body: some View {
         VStack{
             Button{
                 apiAccess.jsonResult = "Requesting..."
