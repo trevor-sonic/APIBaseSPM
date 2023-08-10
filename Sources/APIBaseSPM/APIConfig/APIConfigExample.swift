@@ -1,5 +1,5 @@
 //
-//  ApiConfig.swift
+//  ApiConfigExample.swift
 //  API Base SPM
 //
 //  Created by Beydag, (Trevor) Duygun (Proagrica-HBE) on 09/08/2023.
@@ -7,6 +7,13 @@
 //
 
 import Foundation
+
+/*
+ Copy ApiConfigExample.swift into your project
+ Rename it as ApiConfig.swift
+ Rename ExampleEndpoint to MainEndpoint, TranslationEndpoint etc. (per API environment)
+ Rename ExampleParameter to MainParameter, TranslationParameter etc. (per API environment)
+ */
 
 // MARK: - Config Api endpoints
 public enum ExampleEndpoint: ApiEndpointProtocol {
