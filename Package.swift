@@ -5,8 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "APIBaseSPM",
+    platforms: [.iOS("13.0")],
     products: [
-        
+        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "APIBaseSPM",
             targets: ["APIBaseSPM"]),
