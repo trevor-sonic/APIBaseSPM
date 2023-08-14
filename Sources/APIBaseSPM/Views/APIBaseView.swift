@@ -22,12 +22,10 @@ import Combine
         // Usage Example
         ApiBase()
             .baseURL("https://dev-3g6p7dv0kyh1c01.api.raw-labs.com")
-
             .endpoint(path: "/json-programming-heroes", method: "GET")
-
-            
-            //.bearer(token: "")
-            //.endpoint(ExampleEndpoint.getCountries)
+        
+        //.bearer(token: "")
+        //.endpoint(ExampleEndpoint.getCountries)
         //.endpoint(ApiEndpoint.rawEndpoint("/api/countries/locales", "GET"))
         //.parameter(ApiParameter.rawParameter("key", "value"))
         //.parameter(ExampleParameter.userID("12345"))
