@@ -112,7 +112,7 @@ public class ApiBase {
             .eraseToAnyPublisher()
     }
     
-    private func makeRequest() -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
+    public func makeRequest() -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
         guard let url = self.url?.appendingPathComponent(endpoint.path) else {
             return Fail(error: URLError(.badURL))
                 .eraseToAnyPublisher()
