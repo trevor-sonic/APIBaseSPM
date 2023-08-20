@@ -17,12 +17,52 @@ import Combine
     
     @Published var jsonResult: String = "..."
     
+  /*
+    let jsonString =
+"""
+{
+    "model": "gpt-3.5-turbo",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "Hello!"
+      }
+    ]
+}
+"""
+    */
+    
+    
+    let jsonString =
+"""
+{
+    "model": "gpt-3.5-turbo",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant."
+      },
+      {
+        "role": "user",
+        "content": "Hello!"
+      }
+    ]
+}
+"""
+    
+    
     func callApi(){
         
         // Usage Example
         ApiBase()
-            .baseURL("https://dev-3g6p7dv0kyh1c01.api.raw-labs.com")
-            .endpoint(path: "/json-programming-heroes", method: "GET")
+            .baseURL("https://api.openai.com/v1")
+            .bearer(token: "zxywertNFokJdGxxxxx")
+            .endpoint(path: "/chat/completions", method: "POST")
+            .jsonBody(jsonString)
         
         //.bearer(token: "")
         //.endpoint(ExampleEndpoint.getCountries)

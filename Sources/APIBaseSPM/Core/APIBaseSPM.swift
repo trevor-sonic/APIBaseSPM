@@ -24,7 +24,7 @@ public class ApiBase {
 
     private var headers: [String: String] = [:]
     private var parameters: [String: Any] = [:]
-    
+    private var jsonPayload: Data?
 
     public enum DefaultEndpoint: ApiEndpointProtocol {
         case `default`
@@ -66,10 +66,30 @@ public class ApiBase {
     }
     
     public func bearer(token: String) -> Self {
-        self.headers["Authorization"] = token
+        self.headers["Authorization"] = "Bearer " + token
         return self
     }
+    // MARK: - Request with JSON object
+    // This method allows you to set the JSON payload that should be sent with the request.
+    public func jsonBody<T: Encodable>(_ value: T) -> Self {
+        do {
+            let data = try JSONEncoder().encode(value)
+            self.jsonPayload = data
+            return self
+        } catch {
+            fatalError("Failed to encode JSON: \(error)")
+        }
+    }
     
+    public func jsonBody(_ jsonString: String) -> Self {
+        if let data = jsonString.data(using: .utf8) {
+            self.jsonPayload = data
+            return self
+        } else {
+            fatalError("Failed to convert JSON string to Data")
+        }
+    }
+
   
     
     // MARK: - Request Types
@@ -102,7 +122,12 @@ public class ApiBase {
         request.httpMethod = endpoint.method
         request.allHTTPHeaderFields = headers
         
-        if !parameters.isEmpty {
+        if let jsonPayload = jsonPayload {
+            request.httpBody = jsonPayload
+            if request.value(forHTTPHeaderField: "Content-Type") == nil {
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
+        } else if !parameters.isEmpty {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
             } catch {
@@ -114,6 +139,30 @@ public class ApiBase {
         return URLSession.shared.dataTaskPublisher(for: request)
             .eraseToAnyPublisher()
     }
+
+    
+//    private func makeRequest() -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
+//        guard let url = self.url?.appendingPathComponent(endpoint.path) else {
+//            return Fail(error: URLError(.badURL))
+//                .eraseToAnyPublisher()
+//        }
+//        
+//        var request = URLRequest(url: url)
+//        request.httpMethod = endpoint.method
+//        request.allHTTPHeaderFields = headers
+//        
+//        if !parameters.isEmpty {
+//            do {
+//                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+//            } catch {
+//                return Fail(error: URLError(.badServerResponse))
+//                    .eraseToAnyPublisher()
+//            }
+//        }
+//        
+//        return URLSession.shared.dataTaskPublisher(for: request)
+//            .eraseToAnyPublisher()
+//    }
 }
 
 
