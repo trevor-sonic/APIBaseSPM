@@ -113,7 +113,21 @@ public class ApiBase {
     }
     
     public func makeRequest() -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
-        guard let url = self.url?.appendingPathComponent(endpoint.path) else {
+        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            return Fail(error: URLError(.badURL))
+                .eraseToAnyPublisher()
+        }
+        
+        // Append parameters to URL for GET requests
+        if endpoint.method.uppercased() == "GET" && !parameters.isEmpty {
+            var queryItems = [URLQueryItem]()
+            for (key, value) in parameters {
+                queryItems.append(URLQueryItem(name: key, value: "\(value)"))
+            }
+            urlComponents.queryItems = queryItems
+        }
+        
+        guard let url = urlComponents.url else {
             return Fail(error: URLError(.badURL))
                 .eraseToAnyPublisher()
         }
@@ -127,42 +141,13 @@ public class ApiBase {
             if request.value(forHTTPHeaderField: "Content-Type") == nil {
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             }
-        } else if !parameters.isEmpty {
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            } catch {
-                return Fail(error: URLError(.badServerResponse))
-                    .eraseToAnyPublisher()
-            }
         }
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .eraseToAnyPublisher()
     }
 
-    
-//    private func makeRequest() -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
-//        guard let url = self.url?.appendingPathComponent(endpoint.path) else {
-//            return Fail(error: URLError(.badURL))
-//                .eraseToAnyPublisher()
-//        }
-//        
-//        var request = URLRequest(url: url)
-//        request.httpMethod = endpoint.method
-//        request.allHTTPHeaderFields = headers
-//        
-//        if !parameters.isEmpty {
-//            do {
-//                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
-//            } catch {
-//                return Fail(error: URLError(.badServerResponse))
-//                    .eraseToAnyPublisher()
-//            }
-//        }
-//        
-//        return URLSession.shared.dataTaskPublisher(for: request)
-//            .eraseToAnyPublisher()
-//    }
+
 }
 
 
