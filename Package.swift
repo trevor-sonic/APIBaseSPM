@@ -5,7 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "APIBaseSPM",
-    platforms: [.iOS(.v13)],
+    
+    platforms: [
+            .iOS(.v13),
+            .macOS(.v10_15) // Adding macOS platform support
+        ],
+    
     products: [
         .library(
             name: "APIBaseSPM",
