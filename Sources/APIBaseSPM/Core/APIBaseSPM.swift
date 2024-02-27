@@ -113,13 +113,13 @@ public class ApiBase {
     }
     
     public func makeRequest() -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
-        guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+        guard var urlComponents = URLComponents(url: self.url.appendingPathComponent(endpoint.path), resolvingAgainstBaseURL: true) else {
             return Fail(error: URLError(.badURL))
                 .eraseToAnyPublisher()
         }
         
         // Append parameters to URL for GET requests
-        if endpoint.method.uppercased() == "GET" && !parameters.isEmpty {
+        if endpoint.method == "GET" && !parameters.isEmpty {
             var queryItems = [URLQueryItem]()
             for (key, value) in parameters {
                 queryItems.append(URLQueryItem(name: key, value: "\(value)"))
@@ -146,6 +146,7 @@ public class ApiBase {
         return URLSession.shared.dataTaskPublisher(for: request)
             .eraseToAnyPublisher()
     }
+
 
 
 }
